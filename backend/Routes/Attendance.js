@@ -1,15 +1,27 @@
-const mongoose = require(`mongoose`);
-const express = require(`express`);
+const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
-const Attendance = require('../Schema/Attendance')
+// Import controller functions
+const {
+    getAllAttendance,
+    getAttendanceByDate,
+    attendanceSummary,
+    attendanceByDate
+} = require('../Controller/AttendanceController');
 
-router.get("/",async(req,res)=>{
-    try{
-        const allAttendance = await Attendance.find();
-        res.status(200).json(allAttendance)
-    }catch(err){
-        res.status(404).json({message:"there has been some error",err})
-    }
-});
-module.exports = router
+// Routes
+
+// ✅ Get all attendance
+router.get("/:id", auth.requireAuth, getAllAttendance);
+
+// ✅ Get attendance by date
+router.get("/:id/date/:date", auth.requireAuth, getAttendanceByDate);
+
+// ✅ Get attendance summary
+router.get("/:id/summary", auth.requireAuth, attendanceSummary);
+
+// ✅ Get attendance in date range
+router.get("/:id/range", auth.requireAuth, attendanceByDate);
+
+module.exports = router;

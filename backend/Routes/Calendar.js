@@ -1,17 +1,16 @@
-const mongoose = require(`mongoose`);
 const express = require(`express`);
 const router = express.Router();
 
-const Calendar = require('../Schema/Calendar');
+const{
+    getAllCalendarEvents,
+    getCalendarByDate,
+    getCalendarByRange,
+}=require('../Controller/CalendarController')
 
-router.get("/", async (req, res) => {
-    try {
-        const allCalendar = await Calendar.find();
-        res.status(200).json(allCalendar);
-    } catch (err) {
-        console.error('Error fetching calendar data:', err);
-        res.status(500).json({ message: 'Server error while fetching calendar data' });
-    }
-});
+//ROUTES
+
+router.get("/",getAllCalendarEvents);
+router.get("/date/:date",getCalendarByDate);
+router.get("/date/range",getCalendarByRange);
 
 module.exports = router;

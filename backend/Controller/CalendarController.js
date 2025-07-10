@@ -1,3 +1,5 @@
+const Calendar = require('../models/Calendar');
+
 // 1️ Get all calendar events
 const getAllCalendarEvents = async (req, res) => {
     try {
@@ -40,4 +42,9 @@ const getCalendarByRange = async (req, res) => {
         console.error("Error fetching calendar by range:", err);
         res.status(500).json({ message: "Server error while fetching calendar" });
     }
+};
+module.exports = {
+    getCalendarByRange,
+    getCalendarByDate,
+    getAllCalendarEvents
 };

@@ -1,17 +1,14 @@
-const mongoose = require(`mongoose`);
-const express = require(`express`);
+const express = require('express');
 const router = express.Router();
 
-const Marks = require('../Schema/Marks');
+// Import controller functions
+const {
+    getAllSemesterMarks,
+    getMarksBySemester
+} = require('../Controller/MarksController');
 
-router.get("/", async (req, res) => {
-    try {
-        const allMarks = await Marks.find();
-        res.status(200).json(allMarks);
-    } catch (err) {
-        console.error("Error fetching the Marks data", err);
-        res.status(500).json({ message: 'Server error while fetching Marks data' });
-    }
-});
+// Routes
+router.get("/:id", getAllSemesterMarks);
+router.get("/:id/semester/:semester", getMarksBySemester);
 
 module.exports = router;
