@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const studentAuthController = require('../Controller/StudentAuthController');
-const auth = require('../middleware/auth'); // ← NEW LINE: Import auth middleware
+const auth = require('../Middleware/auth'); // ← NEW LINE: Import auth middleware
 
 // LOGIN ROUTE
-router.post('/login',auth.requireGuest(), studentAuthController.login);
+router.post('/login',validation.validateLogin,auth.requireGuest, studentAuthController.login);
 //
 
 // LOGOUT ROUTE
-router.post('/logout', auth.requireAuth, studentAuthController.logout);
+router.post('/logout',validation.validateLogin, auth.requireAuth, studentAuthController.logout);
 //
 
 // PROTECTED ROUTE - Profile page (must be logged in)

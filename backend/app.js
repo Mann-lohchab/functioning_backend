@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin:"",// Allow frontend dev server
+    origin:'http://localhost:3000',// Allow frontend dev server
     credentials:true,// Allow cookies to be sent
 }));
 
@@ -24,9 +24,9 @@ const connectDB = require('./config/database');
 connectDB();
 
 //ROUTES
-const StudentAuth = require('Routes/StudentAuth');
+const StudentAuth = require('./Routes/StudentAuth');
 const Attendance = require('./Routes/Attendance');
-const Calender = require('./Routes/Calendar');
+const Calendar = require('./Routes/Calendar');
 const Homework = require('./Routes/Homework');
 const Marks = require('./Routes/Marks');
 const Notice = require('./Routes/Notice');
