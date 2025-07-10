@@ -1,0 +1,32 @@
+
+const mongoose = require('mongoose');
+// Schema of Calender
+const calendarSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    date: {
+        type: Date,
+        required: true
+    },
+    category: {
+        type: String,
+        enum: ['Holiday', 'Exam', 'Event', 'Reminder', 'Other'], // you can customize this
+        default: 'Other'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+const Calendar = mongoose.model('Calendar', calendarSchema);
+
+module.exports = Calendar; // exporting Calender

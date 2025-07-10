@@ -3,12 +3,12 @@ const bcrypt = require('bcryptjs');
 
 exports.login = async (req,res)=>{
     const { studentID, password } = req.body;
-    if(!studentID||password){
+    if(!studentID||!password){
         return res.status(400).json({ message: "Student ID and Password are required" });
     }
     try{
         //finding the student
-        const student = await studentID.findOne({studentID});
+        const foundstudent = await studentID.findOne({studentID});
         if(!student){
             return res.status(404).json({ message: "Student not found" });
         }
@@ -37,7 +37,7 @@ exports.login = async (req,res)=>{
 
 exports.logout = async (req,res)=>{
     try {
-        res.clearCookies('student_token');
+        res.clearCookie('student_token');
         res.status(200).json({message: "Student logged out successfully"});
     }catch(err){
         console.error("Logout Error:", err);

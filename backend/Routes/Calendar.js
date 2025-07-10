@@ -9,8 +9,8 @@ const{
 
 //ROUTES
 
-router.get("/",getAllCalendarEvents);
-router.get("/date/:date",getCalendarByDate);
-router.get("/date/range",getCalendarByRange);
+router.get("/",auth.requireAuth,getAllCalendarEvents);
+router.get("/date/:date",auth.requireAuth,getCalendarByDate);
+router.get("/date/range",auth.requireAuth,getCalendarByRange);
 
 module.exports = router;

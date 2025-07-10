@@ -4,7 +4,7 @@ const studentAuthController = require('../Controller/StudentAuthController');
 const auth = require('../middleware/auth'); // ← NEW LINE: Import auth middleware
 
 // LOGIN ROUTE
-router.post('/login', auth.requireGuest, studentAuthController.login);
+router.post('/login',auth.requireGuest(), studentAuthController.login);
 //
 
 // LOGOUT ROUTE

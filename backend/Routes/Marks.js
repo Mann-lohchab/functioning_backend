@@ -8,7 +8,7 @@ const {
 } = require('../Controller/MarksController');
 
 // Routes
-router.get("/:id", getAllSemesterMarks);
-router.get("/:id/semester/:semester", getMarksBySemester);
+router.get("/:id",auth.requireAuth, getAllSemesterMarks);
+router.get("/:id/semester/:semester",auth.requireAuth, getMarksBySemester);
 
 module.exports = router;

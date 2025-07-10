@@ -7,7 +7,7 @@ const{
 
 //ROUTES
 
-router.get("/:id",getFullTimetable);
+router.get("/:id",auth.requireAuth,getFullTimetable);
 
 
 module.exports = router

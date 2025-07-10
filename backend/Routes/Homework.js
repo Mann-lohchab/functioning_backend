@@ -9,8 +9,8 @@ const {
 } = require('../Controller/HomeworkController');
 
 // Routes
-router.get("/:id", getAllHomework);
-router.get("/:id/date/:date", getHomeworkByDate);
-router.get("/:id/range", getHomeworkByRange);
+router.get("/:id",auth.requireAuth, getAllHomework);
+router.get("/:id/date/:date",auth.requireAuth, getHomeworkByDate);
+router.get("/:id/range",auth.requireAuth, getHomeworkByRange);
 
 module.exports = router
