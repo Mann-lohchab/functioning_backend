@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 //Schema of Student
 const studentSchema = new mongoose.Schema({
@@ -8,7 +7,7 @@ const studentSchema = new mongoose.Schema({
     },
     lastName: {
         type: String,
-        required: false,
+
     },
     fathersName: {
         type: String,
@@ -26,12 +25,18 @@ const studentSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    section:{
-        type:String,
-        required:true,
-    }
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
 });
 
 
-const Student = mongoose.model('Student', studentSchema);
-module.exports = Student; //export Student
+// Safe Mode: Prevent OverwriteModelError
+const Student = mongoose.models.Student || mongoose.model('Student', studentSchema);
+module.exports = Student;

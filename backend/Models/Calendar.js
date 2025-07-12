@@ -27,6 +27,6 @@ const calendarSchema = new mongoose.Schema({
     }
 });
 
-const Calendar = mongoose.model('Calendar', calendarSchema);
-
-module.exports = Calendar; // exporting Calender
+// Safe Mode
+const Calendar = mongoose.models.Calendar || mongoose.model('Calendar', calendarSchema);
+module.exports = Calendar;

@@ -6,8 +6,8 @@ const auth = require('../Middleware/auth');
 const {
     getAllAttendance,
     getAttendanceByDate,
-    attendanceSummary,
-    attendanceByDate
+    AttendanceSummary,
+    AttendanceByRange
 } = require('../Controller/AttendanceController');
 
 // Routes
@@ -19,9 +19,9 @@ router.get("/:id", auth.requireAuth, getAllAttendance);
 router.get("/:id/date/:date", auth.requireAuth, getAttendanceByDate);
 
 // ✅ Get attendance summary
-router.get("/:id/summary", auth.requireAuth, attendanceSummary);
+router.get("/:id/summary", auth.requireAuth, AttendanceSummary);
 
 // ✅ Get attendance in date range
-router.get("/:id/range", auth.requireAuth, attendanceByDate);
+router.get("/:id/range", auth.requireAuth,AttendanceByRange);
 
 module.exports = router;

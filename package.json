@@ -1,8 +1,29 @@
 {
+  "name": "portal-1",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Error404Found404/mkc#readme",
+  "bugs": {
+    "url": "https://github.com/Error404Found404/mkc/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Error404Found404/mkc.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node backend/App.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.0"
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.3"
   }
 }

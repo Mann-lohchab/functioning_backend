@@ -18,5 +18,6 @@ const noticeSchema = new mongoose.Schema({
 });
 
 
-const Notice = mongoose.model('Notice' , noticeSchema);
-module.exports = Notice; //exporting notice
+// Safe Mode
+const Notice = mongoose.models.Notice || mongoose.model('Notice', noticeSchema);
+module.exports = Notice;

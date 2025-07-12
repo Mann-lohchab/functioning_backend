@@ -8,24 +8,24 @@ exports.login = async (req,res)=>{
     }
     try{
         //finding the student
-        const foundstudent = await studentID.findOne({studentID});
-        if(!student){
+        const studentData = await student.findOne({studentID});
+        if(!studentData ){
             return res.status(404).json({ message: "Student not found" });
         }
         //comparing the password
-        const isMatch = await bcrypt.compare(password,student.password);
+        const isMatch = await bcrypt.compare(password,studentData.password);
         if(!isMatch){
             return res.status(400).json({ message: "Invalid credentials" });
         }
         //setting the cookie
-        res.cookie('student_token', student._id, {
+        res.cookie('student_token', studentData ._id, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000, // 1 day
             secure: process.env.NODE_ENV === 'development'
         });
         res.status(200).json({
-            message: `Welcome ${student.name}`,
-            studentID: student.studentID
+            message: `Welcome ${studentData.name}`,
+            studentID: studentData.studentID
         });
 
     }catch(err){

@@ -30,5 +30,6 @@ const markSchema = new mongoose.Schema({
     },
 });
 
-const Marks = mongoose.model('Marks' , markSchema );
+// Safe Mode
+const Marks = mongoose.models.Marks || mongoose.model('Marks', markSchema);
 module.exports = Marks;

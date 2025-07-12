@@ -1,5 +1,5 @@
 require('dotenv').config();//this loads up the environment variables
-const PORT = 7000;
+const PORT = 1000;
 
 
 //CORE MODULES
@@ -15,9 +15,10 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin:'http://localhost:3000',// Allow frontend dev server
-    credentials:true,// Allow cookies to be sent
+    origin: process.env.CLIENT_URL,
+    credentials: true
 }));
+
 
 //CONNECTION TO MONGODB
 const connectDB = require('./config/database');
@@ -34,7 +35,7 @@ const Timetable = require('./Routes/Timetable');
 
 app.use('/api/students', StudentAuth);
 app.use('/api/students/Attendance',Attendance);
-app.use('/api/students/Calendar',Calender);
+app.use('/api/students/Calendar',Calendar);
 app.use('/api/students/Homework',Homework);
 app.use('/api/students/Marks',Marks);
 app.use('/api/students/Notice',Notice);

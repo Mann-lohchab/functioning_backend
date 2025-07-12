@@ -21,5 +21,6 @@ const attendanceSchema = new mongoose.Schema({
 
 });
 
-const Attendance = mongoose.model('Attendance', attendanceSchema);
+// Safe Mode: Prevent OverwriteModelError
+const Attendance = mongoose.models.Attendance || mongoose.model('Attendance', attendanceSchema);
 module.exports = Attendance; //export Attendance

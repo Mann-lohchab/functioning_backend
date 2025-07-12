@@ -1,28 +1,27 @@
-
 const mongoose = require('mongoose');
-//Schema of homework
+
+// Schema of homework
 const homeworkSchema = new mongoose.Schema({
     title: {
-        String,
+        type: String,  // FIXED: Added 'type:' before String
         required: true,
     },
     description: {
-        String,
+        type: String,  // FIXED: Added 'type:' before String
         required: true,
     },
     assignDate: {
-        Date: Date,
-        type: Date,
-        type: Date,
+        type: Date,    // FIXED: Removed duplicate 'Date: Date,'
+        required: true
     },
-    DueDate: {
-        Date: Date,
-        type: Date,
+    dueDate: {     // FIXED: Changed 'DueDate' to 'dueDate' (camelCase)
+        type: Date,    // FIXED: Changed from String to Date, removed duplicate 'Date: Date,'
         required: true,
     },
-
-
+}, {
+    timestamps: true  // Optional: adds createdAt and updatedAt automatically
 });
 
-const Homework = mongoose.model('Homework', homeworkSchema);
-module.exports = Homework; // export Homework
+// Safe Mode
+const Homework = mongoose.models.Homework || mongoose.model('Homework', homeworkSchema);
+module.exports = Homework;

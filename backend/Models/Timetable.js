@@ -40,4 +40,6 @@ const timetableSchema = new mongoose.Schema({
     timetable: [daySchema]
 });
 
-module.exports = mongoose.model('Timetable', timetableSchema); // export Timetable
+// Safe Mode
+const Timetable = mongoose.models.Timetable || mongoose.model('Timetable', timetableSchema);
+module.exports = Timetable;

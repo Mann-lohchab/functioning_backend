@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const validation = require('../Middleware/validation');
 const studentAuthController = require('../Controller/StudentAuthController');
 const auth = require('../Middleware/auth'); // ← NEW LINE: Import auth middleware
 
