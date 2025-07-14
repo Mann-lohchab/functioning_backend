@@ -9,6 +9,6 @@ const{
 }= require('../Controller/NoticeController')
 
 //ROUTES
-router.get("/",auth.requireAuth,getFullNotice);
-router.get("/date/:date",auth.requireAuth,getNoticeByDate);
+router.get("/:id", getFullNotice);
+router.get("/:id/date", getNoticeByDate);
 module.exports = router

@@ -24,7 +24,7 @@ exports.login = async (req,res)=>{
             secure: process.env.NODE_ENV === 'development'
         });
         res.status(200).json({
-            message: `Welcome ${studentData.name}`,
+            message: `Welcome ${studentData.firstName} ${studentData.lastName || ''}`.trim(),
             studentID: studentData.studentID
         });
 

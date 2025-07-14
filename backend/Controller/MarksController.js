@@ -1,4 +1,4 @@
-const Marks = require('../models/Marks');
+const Marks = require('../Models/Marks');
 
 // 1️⃣ Get Marks of All Semesters
 const getAllSemesterMarks = async (req, res) => {
@@ -16,7 +16,7 @@ const getAllSemesterMarks = async (req, res) => {
 };
 
 // 2️⃣ Get Marks of a Specific Semester
-const getMarksBySemester = async (req, res) => {
+const getMarksByExamType = async (req, res) => {
     const studentID = req.params.id;
     const semester = req.params.semester;
 
@@ -34,5 +34,5 @@ const getMarksBySemester = async (req, res) => {
 
 module.exports = {
     getAllSemesterMarks,
-    getMarksBySemester
+    getMarksByExamType
 };

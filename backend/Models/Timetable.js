@@ -7,9 +7,9 @@ const  periodSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    teacher: {
-        type: String  // or ObjectId if you have a Teacher collection
-    },
+    // teacher: {
+    //     type: String  // or ObjectId if you have a Teacher collection
+    // },
     startTime: {
         type: String, // e.g., "09:00"
         required: true
@@ -18,9 +18,9 @@ const  periodSchema = new mongoose.Schema({
         type: String, // e.g., "10:00"
         required: true
     },
-    room: {
-        type: String
-    }
+    // room: {
+    //     type: String
+    // }
 });
 
 const daySchema = new mongoose.Schema({

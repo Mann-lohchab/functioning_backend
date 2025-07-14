@@ -1,4 +1,4 @@
-const express = require(`express`);
+const express = require('express');
 const router = express.Router();
 const auth = require('../Middleware/auth');
 
@@ -8,7 +8,7 @@ const{
 
 //ROUTES
 
-router.get("/:id",auth.requireAuth,getFullTimetable);
+router.get("/:id",getFullTimetable);
 
 
 module.exports = router

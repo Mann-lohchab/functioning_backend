@@ -2,7 +2,8 @@
 const mongoose = require('mongoose');
 //Schema of Attendance
 const attendanceSchema = new mongoose.Schema({
-    name: {
+
+    date: {
         type: String,
         required: true,
     },
@@ -18,6 +19,11 @@ const attendanceSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    status:{
+        type: String,
+        enum: ["Present", "Absent"],
+        required: true
+    }
 
 });
 

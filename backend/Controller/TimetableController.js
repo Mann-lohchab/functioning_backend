@@ -2,9 +2,9 @@ const Timetable = require('../models/Timetable');
 
 // GET FULL TIMETABLE
 const getFullTimetable = async (req, res) => {
-    const studentID = req.params.id;
+    const classId = req.params.id;
     try {
-        const fullTimetable = await Timetable.find({ studentID });
+        const fullTimetable = await Timetable.find({ classId });
         if (fullTimetable.length === 0) {
             return res.status(404).json({ message: "The timetable was not found" });
         }

@@ -2,9 +2,8 @@
 const mongoose = require('mongoose');
 //Schema of Marks
 const markSchema = new mongoose.Schema({
-    studentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Student',  // refers to Student collection
+    studentID: {
+        type: String,
         required: true
     },
     subject: {
@@ -17,11 +16,15 @@ const markSchema = new mongoose.Schema({
     },
     totalMarks: {
         type: Number,
-        default: 100
+
     },
     examType: {
         type: String,
-        enum: ['Midterm', 'Final', 'Class Test', 'Quiz'],
+        enum: ['Midterm', 'Final', 'Class Test',],
+        required: true
+    },
+    semester: {
+        type: String,
         required: true
     },
     date: {

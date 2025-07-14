@@ -1,4 +1,4 @@
-const Homework = require('../models/Homework');
+const Homework = require('../Models/Homework');
 
 // Get All Homework for a specific student
 const getAllHomework = async (req, res) => {
@@ -19,7 +19,7 @@ const getHomeworkByDate = async (req, res) => {
     try {
         const recordsByDate = await Homework.find({
             studentID,
-            date: new Date(date).toDateString()
+            date: new Date(date)
         }); // Using find because there can be multiple homework on that day
 
         if (recordsByDate.length === 0) { // Check array length, not just truthiness

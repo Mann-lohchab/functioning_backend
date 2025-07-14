@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 
 //this is schema of notice
 const noticeSchema = new mongoose.Schema({
+    studentID:{
+        type: String,
+        required: true,
+    },
     title: {
         type: String,
         required: true,

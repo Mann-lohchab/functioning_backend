@@ -5,11 +5,11 @@ const auth = require('../Middleware/auth');
 // Import controller functions
 const {
     getAllSemesterMarks,
-    getMarksBySemester
+     getMarksByExamType
 } = require('../Controller/MarksController');
 
 // Routes
-router.get("/:id",auth.requireAuth, getAllSemesterMarks);
-router.get("/:id/semester/:semester",auth.requireAuth, getMarksBySemester);
+router.get("/:id", getAllSemesterMarks);
+router.get("/:id/semester/:semester", getMarksByExamType);
 
 module.exports = router;

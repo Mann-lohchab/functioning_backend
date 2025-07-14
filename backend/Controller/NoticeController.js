@@ -1,4 +1,4 @@
-const Notice = require('../models/Notice');
+const Notice = require('../Models/Notice');
 
 // GET FULL NOTICE
 const getFullNotice = async (req, res) => {
@@ -17,7 +17,7 @@ const getFullNotice = async (req, res) => {
 
 //GET NOTICE BY DATE
 const getNoticeByDate = async (req, res) => {
-    const studentID = req.params.id;
+    const studentID = req.params.id;  // This will now work correctly
     const fromDate = req.query.fromDate;
     const toDate = req.query.toDate;
     try {

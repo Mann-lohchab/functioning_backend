@@ -12,16 +12,19 @@ const {
 
 // Routes
 
-// ✅ Get all attendance
-router.get("/:id", auth.requireAuth, getAllAttendance);
 
 // ✅ Get attendance by date
-router.get("/:id/date/:date", auth.requireAuth, getAttendanceByDate);
+router.get("/:id/date/:date",getAttendanceByDate);
 
 // ✅ Get attendance summary
-router.get("/:id/summary", auth.requireAuth, AttendanceSummary);
+router.get("/:id/summary",  AttendanceSummary);
 
 // ✅ Get attendance in date range
-router.get("/:id/range", auth.requireAuth,AttendanceByRange);
+router.get("/:id/range",AttendanceByRange);
+
+// ✅ Get all attendance
+router.get("/:id",getAllAttendance);
+
+
 
 module.exports = router;
