@@ -9,7 +9,7 @@ const {
 } = require('../Controller/MarksController');
 
 // Routes
-router.get("/:id", getAllSemesterMarks);
-router.get("/:id/semester/:semester", getMarksByExamType);
+router.get("/:id",auth.requireAuth, getAllSemesterMarks);
+router.get("/:id/semester/:semester",auth.requireAuth, getMarksByExamType);
 
 module.exports = router;

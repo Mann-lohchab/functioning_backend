@@ -5,7 +5,10 @@ const Student = require('../Models/Student');
 const getAllAttendance = async (req, res) => {
     const studentID = req.params.id;
     try {
-        const records = await Attendance.find({ studentID });
+        const records = await Attendance.find({
+            studentID: new RegExp(`^${studentID}$`, "i")
+        });// this will allow us to not have uppercase or lower case to have impact
+
         res.status(200).json(records);
     } catch (err) {
         console.error("Error fetching all attendance:", err);
@@ -13,26 +16,6 @@ const getAllAttendance = async (req, res) => {
     }
 };
 
-// Get Attendance By Date
-// const getAttendanceByDate = async (req, res) => {
-//     const studentID = req.params.id;
-//     const date = req.params.date;
-//     try {
-//         const recordsByDate = await Attendance.findOne({
-//             studentID,
-//             date: date,
-//         });
-//
-//         if (!recordsByDate) {
-//             return res.status(404).json({ message: "No attendance record found for this date" });
-//         }
-//
-//         res.status(200).json(recordsByDate);
-//     } catch (err) {
-//         console.error("Error fetching attendance by date:", err);
-//         res.status(500).json({ message: "Server error while fetching attendance" });
-//     }
-// };
 const getAttendanceByDate = async (req, res) => {
     const studentID = req.params.id;
     const date = req.params.date;
@@ -49,7 +32,7 @@ const getAttendanceByDate = async (req, res) => {
         console.log("Records for this student:", studentRecords.length); // Debug line 3
 
         const recordsByDate = await Attendance.findOne({
-            studentID,
+            studentID: new RegExp(`^${studentID}$`, "i"),
             date: date,
         });
 
@@ -70,8 +53,14 @@ const getAttendanceByDate = async (req, res) => {
 const AttendanceSummary = async (req, res) => {
     const studentID = req.params.id;
     try {
-        const totalPresent = await Attendance.countDocuments({ studentID, status: "Present" });
-        const totalAbsent = await Attendance.countDocuments({ studentID, status: "Absent" });
+        const totalPresent = await Attendance.countDocuments({
+            studentID: new RegExp(`^${studentID}$`, "i"),
+            status: "Present"
+        });
+        const totalAbsent = await Attendance.countDocuments({
+            studentID: new RegExp(`^${studentID}$`, "i"),
+            status: "Absent"
+        });
         const totalDays = totalAbsent + totalPresent;
         const percentage = totalDays ? ((totalPresent / totalDays) * 100).toFixed(2) : 0;
 
@@ -95,12 +84,13 @@ const AttendanceByRange = async (req, res) => {
 
     try {
         const records = await Attendance.find({
-            studentID,
+            studentID: new RegExp(`^${studentID}$`, "i"),
             date: {
                 $gte: fromDate,
                 $lte: toDate
             }
         }).sort({ date: 1 });
+
 
         if (records.length === 0) {
             return res.status(404).json({ message: "No attendance records found for this date range" });

@@ -1,10 +1,13 @@
+
 const Notice = require('../Models/Notice');
 
 // GET FULL NOTICE
 const getFullNotice = async (req, res) => {
     const studentID = req.params.id;
     try {
-        const fullNotice = await Notice.find({ studentID });
+        const fullNotice = await Notice.find({
+            studentID: new RegExp(`^${studentID}$`, "i")
+        });
         if (fullNotice.length === 0) {
             return res.status(404).json({ message: "The Notice was not found" });
         }
@@ -17,12 +20,12 @@ const getFullNotice = async (req, res) => {
 
 //GET NOTICE BY DATE
 const getNoticeByDate = async (req, res) => {
-    const studentID = req.params.id;  // This will now work correctly
+    const studentID = req.params.id;
     const fromDate = req.query.fromDate;
     const toDate = req.query.toDate;
     try {
         const NoticeByDate = await Notice.find({
-            studentID,
+            studentID: new RegExp(`^${studentID}$`, "i"),
             date: { $gte: new Date(fromDate), $lte: new Date(toDate) }
         });
         if (NoticeByDate.length === 0) {

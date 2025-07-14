@@ -2,24 +2,32 @@ const mongoose = require('mongoose');
 
 // Schema of homework
 const homeworkSchema = new mongoose.Schema({
+    studentID:{
+        type: String,
+        required:true
+    },
     title: {
-        type: String,  // FIXED: Added 'type:' before String
+        type: String,
         required: true,
     },
     description: {
-        type: String,  // FIXED: Added 'type:' before String
+        type: String,
         required: true,
     },
     assignDate: {
-        type: Date,    // FIXED: Removed duplicate 'Date: Date,'
+        type: Date,
         required: true
     },
-    dueDate: {     // FIXED: Changed 'DueDate' to 'dueDate' (camelCase)
-        type: Date,    // FIXED: Changed from String to Date, removed duplicate 'Date: Date,'
+    dueDate: {
+        type: Date,
         required: true,
     },
+    date: {  // ADD THIS FIELD
+        type: Date,
+        required: true
+    }
 }, {
-    timestamps: true  // Optional: adds createdAt and updatedAt automatically
+    timestamps: true
 });
 
 // Safe Mode

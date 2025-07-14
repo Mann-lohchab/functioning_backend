@@ -1,10 +1,13 @@
+
 const Homework = require('../Models/Homework');
 
 // Get All Homework for a specific student
 const getAllHomework = async (req, res) => {
     const studentID = req.params.id;
     try {
-        const records = await Homework.find({ studentID });
+        const records = await Homework.find({
+            studentID: new RegExp(`^${studentID}$`, "i")
+        });
         res.status(200).json(records);
     } catch (error) {
         console.error("Error fetching all Homework:", error);
@@ -12,17 +15,22 @@ const getAllHomework = async (req, res) => {
     }
 };
 
-// Get Homework By Date
+// Get Homework By Date (ignores time, only matches date)
 const getHomeworkByDate = async (req, res) => {
     const studentID = req.params.id;
-    const date = req.params.date;
-    try {
-        const recordsByDate = await Homework.find({
-            studentID,
-            date: new Date(date)
-        }); // Using find because there can be multiple homework on that day
+    const dateParam = req.params.date;
 
-        if (recordsByDate.length === 0) { // Check array length, not just truthiness
+    try {
+        const startDate = new Date(dateParam);
+        const endDate = new Date(dateParam);
+        endDate.setHours(23, 59, 59, 999);
+
+        const recordsByDate = await Homework.find({
+            studentID: new RegExp(`^${studentID}$`, "i"),
+            date: { $gte: startDate, $lte: endDate }
+        });
+
+        if (recordsByDate.length === 0) {
             return res.status(404).json({ message: "No Homework record found for this date" });
         }
 
@@ -44,12 +52,13 @@ const getHomeworkByRange = async (req, res) => {
     }
 
     try {
+        const startDate = new Date(fromDate);
+        const endDate = new Date(toDate);
+        endDate.setHours(23, 59, 59, 999);
+
         const records = await Homework.find({
-            studentID,
-            date: {
-                $gte: new Date(fromDate),
-                $lte: new Date(toDate)
-            }
+            studentID: new RegExp(`^${studentID}$`, "i"),
+            date: { $gte: startDate, $lte: endDate }
         });
 
         if (records.length === 0) {

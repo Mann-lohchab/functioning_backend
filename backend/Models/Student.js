@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 //Schema of Student
 const studentSchema = new mongoose.Schema({
-    studentID:{
+    studentID: {
         type: String,
         required: true,
         unique: true
@@ -12,7 +12,6 @@ const studentSchema = new mongoose.Schema({
     },
     lastName: {
         type: String,
-
     },
     fathersName: {
         type: String,
@@ -39,6 +38,15 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // Add these fields for session management
+    sessionExpiry: {
+        type: Date,
+        default: null
+    },
+    lastLoginAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 

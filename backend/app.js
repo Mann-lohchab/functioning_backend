@@ -1,5 +1,5 @@
 require('dotenv').config();//this loads up the environment variables
-const PORT = 1000;
+const PORT = process.env.PORT || 1000;
 
 
 //CORE MODULES
