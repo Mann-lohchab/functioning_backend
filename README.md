@@ -1,1 +1,1 @@
-this readme if for contribut
+this readme if for 
