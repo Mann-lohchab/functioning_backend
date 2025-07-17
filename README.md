@@ -1,1 +1,1 @@
-this readme if for contributio
+this readme if for contribut
