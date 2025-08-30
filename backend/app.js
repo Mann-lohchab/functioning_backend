@@ -4,7 +4,6 @@ const PORT = process.env.PORT || 1000;
 //CORE MODULES
 const express = require('express');
 const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
 
@@ -12,10 +11,11 @@ const app = express();
 
 //MIDDLEWARE
 app.use(express.json());
-app.use(cookieParser());
 app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
+    origin: '*',  // Allow any origin
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Serve static files from public directory

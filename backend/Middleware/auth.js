@@ -1,40 +1,46 @@
 const Student = require('../Models/Student');
+const { verifyToken, extractTokenFromHeader } = require('../utlis/jwtHelpers');
 
-// Middleware to check if student is authenticated
+// Middleware to check if student is authenticated using JWT
 exports.requireAuth = async (req, res, next) => {
     try {
-        // Get the student token from cookies
-        const token = req.cookies.student_token;
+        // Get the Authorization header
+        const authHeader = req.headers.authorization;
+        
+        // Extract token from header
+        const token = extractTokenFromHeader(authHeader);
 
         // Check if token exists
         if (!token) {
             return res.status(401).json({
-                message: "Access denied. Please log in first."
+                message: "Access denied. No token provided."
             });
         }
 
-        // Find student in database using the token (which is studentID)
-        const student = await Student.findById(token);
+        // Verify the token
+        let decoded;
+        try {
+            decoded = verifyToken(token);
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                return res.status(401).json({
+                    message: "Token expired. Please log in again."
+                });
+            } else if (error.name === 'JsonWebTokenError') {
+                return res.status(401).json({
+                    message: "Invalid token. Please log in again."
+                });
+            }
+            throw error;
+        }
+
+        // Find student in database using the decoded studentId
+        const student = await Student.findById(decoded.studentId);
 
         // Check if student exists
         if (!student) {
             return res.status(401).json({
-                message: "Invalid session. Please log in again."
-            });
-        }
-
-        // NEW: Check if session has expired
-        if (student.sessionExpiry && student.sessionExpiry < new Date()) {
-            // Clear the expired session from database
-            await Student.findByIdAndUpdate(student._id, {
-                sessionExpiry: null
-            });
-
-            // Clear the cookie
-            res.clearCookie('student_token');
-
-            return res.status(401).json({
-                message: "Session expired. Please log in again."
+                message: "Invalid token. Student not found."
             });
         }
 
@@ -54,39 +60,39 @@ exports.requireAuth = async (req, res, next) => {
 };
 
 // Middleware to check if student is already logged in (for login/register routes)
+// With JWT, we just check if a valid token is provided
 exports.requireGuest = async (req, res, next) => {
     try {
-        // Get the student token from cookies
-        const token = req.cookies.student_token;
+        // Get the Authorization header
+        const authHeader = req.headers.authorization;
+        
+        // Extract token from header
+        const token = extractTokenFromHeader(authHeader);
 
-        // If token exists, student is already logged in
-        if (token) {
-            // NEW: Check if the token is valid and not expired
-            const student = await Student.findById(token);
-
-            // If student doesn't exist, token is invalid - continue as guest
-            if (!student) {
-                res.clearCookie('student_token');
-                return next();
-            }
-
-            // If session has expired, continue as guest
-            if (student.sessionExpiry && student.sessionExpiry < new Date()) {
-                // Clear expired session
-                await Student.findByIdAndUpdate(student._id, {
-                    sessionExpiry: null
-                });
-                res.clearCookie('student_token');
-                return next();
-            }
-
-            // If we reach here, student is already logged in with valid session
-            return res.status(400).json({
-                message: "You are already logged in"
-            });
+        // If no token, user is a guest - continue
+        if (!token) {
+            return next();
         }
 
-        // Continue to next Middleware (login/register)
+        // Try to verify the token
+        try {
+            const decoded = verifyToken(token);
+            
+            // Check if student exists
+            const student = await Student.findById(decoded.studentId);
+            
+            if (student) {
+                // Valid token and student exists - they're already logged in
+                return res.status(400).json({
+                    message: "You are already logged in"
+                });
+            }
+        } catch (error) {
+            // Token is invalid or expired - treat as guest
+            console.log("Invalid token in requireGuest:", error.message);
+        }
+
+        // Continue to next middleware (login/register)
         next();
 
     } catch (error) {

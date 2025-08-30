@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Authentication Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        #tokenInfo {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JWT Authentication Example</h1>
+        
+        <div id="loginForm">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="studentID">Student ID:</label>
+                <input type="text" id="studentID" placeholder="Enter your student ID">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button onclick="login()">Login</button>
+        </div>
+
+        <div id="authenticatedSection" class="hidden">
+            <h2>Authenticated Actions</h2>
+            <button onclick="getProfile()">Get Profile</button>
+            <button onclick="getDashboard()">Get Dashboard</button>
+            <button onclick="logout()">Logout</button>
+            
+            <div id="tokenInfo">
+                <strong>Current Token:</strong>
+                <p id="tokenDisplay"></p>
+            </div>
+        </div>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:1000/api/students';
+        let authToken = localStorage.getItem('authToken');
+
+        // Check if user is already logged in
+        if (authToken) {
+            showAuthenticatedSection();
+        }
+
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showAuthenticatedSection() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('authenticatedSection').classList.remove('hidden');
+            document.getElementById('tokenDisplay').textContent = authToken || 'No token';
+        }
+
+        function showLoginForm() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('authenticatedSection').classList.add('hidden');
+        }
+
+        async function login() {
+            const studentID = document.getElementById('studentID').value;
+            const password = document.getElementById('password').value;
+
+            if (!studentID || !password) {
+                showMessage('Please enter both Student ID and Password', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ studentID, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.token;
+                    localStorage.setItem('authToken', authToken);
+                    showMessage(data.message, 'success');
+                    showAuthenticatedSection();
+                    
+                    // Clear form
+                    document.getElementById('studentID').value = '';
+                    document.getElementById('password').value = '';
+                } else {
+                    showMessage(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                showMessage('Network error: ' + error.message, 'error');
+            }
+        }
+
+        async function makeAuthenticatedRequest(endpoint) {
+            if (!authToken) {
+                showMessage('No authentication token found', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage(JSON.stringify(data, null, 2), 'success');
+                } else {
+                    showMessage(data.message || 'Request failed', 'error');
+                    
+                    // If token is invalid or expired, clear it and show login form
+                    if (response.status === 401) {
+                        localStorage.removeItem('authToken');
+                        authToken = null;
+                        showLoginForm();
+                    }
+                }
+            } catch (error) {
+                showMessage('Network error: ' + error.message, 'error');
+            }
+        }
+
+        function getProfile() {
+            makeAuthenticatedRequest('/profile');
+        }
+
+        function getDashboard() {
+            makeAuthenticatedRequest('/dashboard');
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            authToken = null;
+            showMessage('Logged out successfully', 'success');
+            showLoginForm();
+        }
+
+        // Allow Enter key to submit login form
+        document.getElementById('password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                login();
+            }
+        });
+    </script>
+</body>
+</html>
