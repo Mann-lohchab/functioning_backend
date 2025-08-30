@@ -2,6 +2,215 @@ const Student = require('../Models/Student');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../utlis/jwtHelpers');
 
+// STUDENT REGISTRATION
+exports.register = async (req, res) => {
+    const {
+        studentID,
+        firstName,
+        lastName,
+        fathersName,
+        mothersName,
+        Address,
+        grade,
+        email,
+        password
+    } = req.body;
+
+    try {
+        // Check if all required fields are provided
+        if (!studentID || !firstName || !fathersName || !mothersName || !Address || !grade || !email || !password) {
+            return res.status(400).json({
+                message: "All required fields must be provided",
+                required: ["studentID", "firstName", "fathersName", "mothersName", "Address", "grade", "email", "password"]
+            });
+        }
+
+        // Check if student already exists
+        const existingStudent = await Student.findOne({
+            $or: [
+                { studentID: studentID },
+                { email: email }
+            ]
+        });
+
+        if (existingStudent) {
+            if (existingStudent.studentID === studentID) {
+                return res.status(409).json({ message: "Student ID already exists" });
+            }
+            if (existingStudent.email === email) {
+                return res.status(409).json({ message: "Email already registered" });
+            }
+        }
+
+        // Hash the password before saving
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Create new student with hashed password
+        const newStudent = new Student({
+            studentID,
+            firstName,
+            lastName: lastName || '',
+            fathersName,
+            mothersName,
+            Address,
+            grade,
+            email,
+            password: hashedPassword // Save the hashed password
+        });
+
+        // Save the student to database
+        await newStudent.save();
+
+        // Generate JWT token for immediate login after registration
+        const token = generateToken({
+            studentId: newStudent._id,
+            studentID: newStudent.studentID
+        });
+
+        res.status(201).json({
+            message: "Registration successful",
+            studentID: newStudent.studentID,
+            token: token,
+            expiresIn: '24h'
+        });
+
+    } catch (err) {
+        console.error("Registration Error:", err);
+        
+        // Handle specific MongoDB errors
+        if (err.code === 11000) {
+            const field = Object.keys(err.keyPattern)[0];
+            return res.status(409).json({
+                message: `${field} already exists`
+            });
+        }
+        
+        res.status(500).json({ message: "Server error during registration" });
+    }
+};
+
+// ADMIN: Add student with hashed password
+exports.addStudent = async (req, res) => {
+    const {
+        studentID,
+        firstName,
+        lastName,
+        fathersName,
+        mothersName,
+        Address,
+        grade,
+        email,
+        password
+    } = req.body;
+
+    try {
+        // Check if all required fields are provided
+        if (!studentID || !firstName || !fathersName || !mothersName || !Address || !grade || !email || !password) {
+            return res.status(400).json({
+                message: "All required fields must be provided",
+                required: ["studentID", "firstName", "fathersName", "mothersName", "Address", "grade", "email", "password"]
+            });
+        }
+
+        // Check if student already exists
+        const existingStudent = await Student.findOne({
+            $or: [
+                { studentID: studentID },
+                { email: email }
+            ]
+        });
+
+        if (existingStudent) {
+            if (existingStudent.studentID === studentID) {
+                return res.status(409).json({ message: "Student ID already exists" });
+            }
+            if (existingStudent.email === email) {
+                return res.status(409).json({ message: "Email already registered" });
+            }
+        }
+
+        // Hash the password before saving
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Create new student with hashed password
+        const newStudent = new Student({
+            studentID,
+            firstName,
+            lastName: lastName || '',
+            fathersName,
+            mothersName,
+            Address,
+            grade,
+            email,
+            password: hashedPassword // Save the hashed password
+        });
+
+        // Save the student to database
+        await newStudent.save();
+
+        res.status(201).json({
+            message: "Student added successfully",
+            student: {
+                studentID: newStudent.studentID,
+                firstName: newStudent.firstName,
+                lastName: newStudent.lastName,
+                email: newStudent.email,
+                grade: newStudent.grade
+            }
+        });
+
+    } catch (err) {
+        console.error("Add Student Error:", err);
+        
+        // Handle specific MongoDB errors
+        if (err.code === 11000) {
+            const field = Object.keys(err.keyPattern)[0];
+            return res.status(409).json({
+                message: `${field} already exists`
+            });
+        }
+        
+        res.status(500).json({ message: "Server error while adding student" });
+    }
+};
+
+// ADMIN: Update student password with hashing
+exports.updateStudentPassword = async (req, res) => {
+    const { studentID, newPassword } = req.body;
+
+    if (!studentID || !newPassword) {
+        return res.status(400).json({ message: "Student ID and new password are required" });
+    }
+
+    try {
+        // Find the student
+        const student = await Student.findOne({ studentID });
+
+        if (!student) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        // Hash the new password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update the password
+        student.password = hashedPassword;
+        await student.save();
+
+        res.status(200).json({
+            message: "Password updated successfully",
+            studentID: student.studentID
+        });
+
+    } catch (err) {
+        console.error("Update Password Error:", err);
+        res.status(500).json({ message: "Server error while updating password" });
+    }
+};
+
 exports.login = async (req, res) => {
     const { studentID, password } = req.body;
 
