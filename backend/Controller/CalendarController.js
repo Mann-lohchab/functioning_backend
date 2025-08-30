@@ -1,5 +1,5 @@
 
-const Calendar = require('../models/Calendar');
+const Calendar = require('../Models/Calendar');
 
 // 1️⃣ Get all calendar events
 const getAllCalendarEvents = async (req, res) => {

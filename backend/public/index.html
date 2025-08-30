@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* CSS Variables for themes */
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --card-bg: #0a0a0a;
+            --border-color: #1a1a1a;
+            --muted-text: #888888;
+            --accent-green: #00ff00;
+            --footer-text: #666666;
+            --hover-bg: #111111;
+        }
+        
+        [data-theme="light"] {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --card-bg: #f8f8f8;
+            --border-color: #e0e0e0;
+            --muted-text: #555555;
+            --accent-green: #00cc00;
+            --footer-text: #777777;
+            --hover-bg: #f0f0f0;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: -2rem;
+            right: 0;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-toggle:hover {
+            border-color: var(--accent-green);
+            background: var(--hover-bg);
+        }
+        
+        .header {
+            margin-bottom: 4rem;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--muted-text);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 500;
+        }
+        
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .about-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: left;
+            margin-bottom: 3rem;
+        }
+        
+        .about-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .about-section p {
+            color: var(--muted-text);
+            font-size: 1rem;
+            line-height: 1.7;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .structure-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: left;
+            margin-bottom: 3rem;
+        }
+        
+        .structure-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .file-tree {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .endpoints-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: left;
+            margin-bottom: 3rem;
+        }
+        
+        .tech-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: left;
+        }
+        
+        .section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        
+        .section:hover {
+            border-color: var(--accent-green);
+            background: var(--hover-bg);
+        }
+        
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .section-icon {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-green);
+            border-radius: 50%;
+        }
+        
+        /* Endpoints */
+        .endpoint-list {
+            display: grid;
+            gap: 1.2rem;
+        }
+        
+        .endpoint {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .endpoint:hover {
+            transform: translateX(6px);
+            background: var(--hover-bg);
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .method {
+            background: var(--accent-green);
+            color: #000000;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+        
+        .path {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .description {
+            color: var(--muted-text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        
+        /* Tech Stack */
+        .tech-list {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tech {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+        
+        .tech:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-3px);
+            background: var(--hover-bg);
+        }
+        
+        .version-info {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: var(--muted-text);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .port-highlight {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+        
+        /* Main Footer */
+        .main-footer {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            text-align: left;
+        }
+        
+        .footer-section h3 {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-section h3::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-section ul li a {
+            color: var(--muted-text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-section ul li a:hover {
+            color: var(--accent-green);
+        }
+        
+        .footer-bottom {
+            border-top: 2px solid var(--border-color);
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--footer-text);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .footer-bottom .port {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .theme-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 2rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            
+            .section {
+                padding: 2rem;
+            }
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="theme-toggle" onclick="toggleTheme()">Light Mode</button>
+        
+        <div class="header">
+            <h1>Student Portal API</h1>
+            <p class="subtitle">Professional backend service for comprehensive student data management and academic operations</p>
+            
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>Service Operational</span>
+            </div>
+        </div>
+        
+        <!-- About Section -->
+        <section class="about-section">
+            <h2>
+                <div class="section-icon"></div>
+                About This Portal
+            </h2>
+            <p>The Student Portal API is a comprehensive backend service designed to streamline academic operations and student data management. Built with modern web technologies, this robust system provides secure access to essential student services including attendance tracking, academic performance monitoring, assignment management, and institutional communications.</p>
+            <p>Our RESTful architecture ensures scalable, reliable, and efficient data exchange while maintaining the highest standards of security and performance. The API serves as the backbone for educational institutions seeking to digitize and optimize their student management processes.</p>
+        </section>
+        
+        <!-- Project Structure -->
+        <section class="structure-section">
+            <h2>
+                <div class="section-icon"></div>
+                Project Structure
+            </h2>
+            <div class="file-tree">├── app.js
+├── backend-structure.txt
+├── config
+│   └── database.js
+├── Controller
+│   ├── AttendanceController.js
+│   ├── CalendarController.js
+│   ├── HomeworkController.js
+│   ├── MarksController.js
+│   ├── NoticeController.js
+│   ├── studentAuthController.js
+│   └── TimetableController.js
+├── Middleware
+│   ├── auth.js
+│   └── validation.js
+├── Models
+│   ├── Attendance.js
+│   ├── Calendar.js
+│   ├── Homework.js
+│   ├── Marks.js
+│   ├── Notice.js
+│   ├── Student.js
+│   └── Timetable.js
+├── package.json
+├── Public
+├── Routes
+│   ├── Attendance.js
+│   ├── Calendar.js
+│   ├── Homework.js
+│   ├── Marks.js
+│   ├── Notice.js
+│   ├── StudentAuth.js
+│   └── Timetable.js
+├── Uploads
+└── utlis
+    ├── dateHelpers.js
+    └── responseHelpers.js
+
+9 directories, 29 files</div>
+        </section>
+        
+        <div class="content-grid">
+            <!-- API Endpoints Section -->
+            <section class="endpoints-section">
+                <h2>
+                    <div class="section-icon"></div>
+                    API Endpoints
+                </h2>
+                <div class="endpoint-list">
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">GET</span>
+                            <span class="path">/api/students</span>
+                        </div>
+                        <div class="description">Student authentication and comprehensive profile management system</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">GET</span>
+                            <span class="path">/api/students/attendance</span>
+                        </div>
+                        <div class="description">Detailed attendance records with statistical analysis and reporting</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">GET</span>
+                            <span class="path">/api/students/calendar</span>
+                        </div>
+                        <div class="description">Academic calendar events, schedules, and important institutional dates</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">GET</span>
+                            <span class="path">/api/students/homework</span>
+                        </div>
+                        <div class="description">Assignment management, submission tracking, and deadline monitoring</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">GET</span>
+                            <span class="path">/api/students/marks</span>
+                        </div>
+                        <div class="description">Academic performance data, grades, and comprehensive result analytics</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">GET</span>
+                            <span class="path">/api/students/notices</span>
+                        </div>
+                        <div class="description">Official institutional announcements and critical notifications</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">GET</span>
+                            <span class="path">/api/students/timetable</span>
+                        </div>
+                        <div class="description">Class schedules, room assignments, and academic timetabling</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technology Stack -->
+            <section class="tech-section">
+                <h2>
+                    <div class="section-icon"></div>
+                    Technology Stack
+                </h2>
+                <div class="tech-list">
+                    <div class="tech">Node.js</div>
+                    <div class="tech">Express.js</div>
+                    <div class="tech">MongoDB</div>
+                    <div class="tech">JWT</div>
+                    <div class="tech">REST API</div>
+                </div>
+                <div class="version-info">
+                    <p>API Version <span class="port-highlight">1.0</span> • Production Environment</p>
+                    <p>Port <span class="port-highlight" id="port">10000</span> • High Availability</p>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Professional Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>API Documentation</h3>
+                    <ul>
+                        <li><a href="#endpoints">Endpoints</a></li>
+                        <li><a href="#authentication">Authentication</a></li>
+                        <li><a href="#rate-limits">Rate Limits</a></li>
+                        <li><a href="#examples">Examples</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://nodejs.org" target="_blank">Node.js</a></li>
+                        <li><a href="https://expressjs.com" target="_blank">Express.js</a></li>
+                        <li><a href="https://mongodb.com" target="_blank">MongoDB</a></li>
+                        <li><a href="#changelog">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#status">Status Page</a></li>
+                        <li><a href="#community">Community</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Student Portal API • Built for Educational Excellence</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Get the actual port from the URL
+        const port = window.location.port || (window.location.protocol === 'https:' ? 443 : 80);
+        document.getElementById('port').textContent = port;
+        
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                themeToggle.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'light') {
+                document.body.setAttribute('data-theme', 'light');
+                themeToggle.textContent = 'Dark Mode';
+            }
+        });
+    </script>
+</body>
+</html>

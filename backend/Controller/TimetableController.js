@@ -1,5 +1,5 @@
 
-const Timetable = require('../models/Timetable');
+const Timetable = require('../Models/Timetable');
 
 // GET FULL TIMETABLE
 const getFullTimetable = async (req, res) => {
