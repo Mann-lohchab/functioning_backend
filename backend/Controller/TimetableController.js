@@ -14,7 +14,7 @@ const getFullTimetable = async (req, res) => {
         res.status(200).json(fullTimetable);
     } catch (error) {
         console.error("Error fetching timetable:", error);
-        res.status(500).json({ message: "There was a server issue while fetching the Timetable", error: error.message });
+        res.status(500).json({ message: "Server error while fetching timetable" });
     }
 };
 

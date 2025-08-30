@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 
 exports.login = async (req,res)=>{
     const { studentID, password } = req.body;
-    console.log("🔍 Login attempt - StudentID:", studentID, "Password:", password);
 
     if(!studentID||!password){
         return res.status(400).json({ message: "Student ID and Password are required" });
@@ -11,18 +10,13 @@ exports.login = async (req,res)=>{
     try{
         //finding the student
         const studentData = await Student.findOne({studentID});
-        console.log("👤 Student found:", studentData ? "YES" : "NO");
 
         if(!studentData ){
             return res.status(404).json({ message: "Student not found" });
         }
 
-        console.log("🔐 Stored hash:", studentData.password);
-        console.log("🔑 Input password:", password);
-
         //comparing the password
         const isMatch = await bcrypt.compare(password,studentData.password);
-        console.log("✅ Password match:", isMatch);
 
         if(!isMatch){
             return res.status(400).json({ message: "Invalid credentials" });

@@ -6,16 +6,8 @@ const validation = require('../Middleware/validation');
 const studentAuthController = require('../Controller/StudentAuthController');
 const auth = require('../Middleware/auth');
 
-// ADD DEBUG MIDDLEWARE
-const debugMiddleware = (req, res, next) => {
-    console.log(`🔍 ${req.method} ${req.path} - Body:`, req.body);
-    console.log('🍪 Cookies:', req.cookies);
-    next();
-};
-
-// LOGIN ROUTE - Fixed order and added debugging
+// LOGIN ROUTE
 router.post('/login',
-    debugMiddleware,
     validation.validateLogin,
     auth.requireGuest,
     studentAuthController.login

@@ -2,6 +2,10 @@
 const mongoose = require('mongoose');
 // Schema of Calender
 const calendarSchema = new mongoose.Schema({
+    studentID: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true,

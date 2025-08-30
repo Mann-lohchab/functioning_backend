@@ -14,7 +14,7 @@ const getFullNotice = async (req, res) => {
         res.status(200).json(fullNotice);
     } catch (error) {
         console.error("Error fetching full notice:", error);
-        res.status(500).json({ message: "There was a server issue while fetching the Notice", error: error.message });
+        res.status(500).json({ message: "Server error while fetching notices" });
     }
 };
 
@@ -34,7 +34,7 @@ const getNoticeByDate = async (req, res) => {
         res.status(200).json(NoticeByDate);
     } catch (error) {
         console.error("Error fetching notice by date:", error);
-        res.status(500).json({ message: "There was a server error while fetching the Notice", error: error.message });
+        res.status(500).json({ message: "Server error while fetching notices" });
     }
 };
 

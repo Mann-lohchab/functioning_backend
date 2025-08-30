@@ -20,23 +20,11 @@ const getAttendanceByDate = async (req, res) => {
     const studentID = req.params.id;
     const date = req.params.date;
 
-    console.log("Searching for:", { studentID, date }); // Debug line 1
-
     try {
-        // First, check if any records exist
-        const allRecords = await Attendance.find({});
-        console.log("Total records in collection:", allRecords.length); // Debug line 2
-
-        // Check if this specific student has any records
-        const studentRecords = await Attendance.find({ studentID });
-        console.log("Records for this student:", studentRecords.length); // Debug line 3
-
         const recordsByDate = await Attendance.findOne({
             studentID: new RegExp(`^${studentID}$`, "i"),
-            date: date,
+            date: new Date(date),
         });
-
-        console.log("Found record:", recordsByDate); // Debug line 4
 
         if (!recordsByDate) {
             return res.status(404).json({ message: "No attendance record found for this date" });
@@ -86,8 +74,8 @@ const AttendanceByRange = async (req, res) => {
         const records = await Attendance.find({
             studentID: new RegExp(`^${studentID}$`, "i"),
             date: {
-                $gte: fromDate,
-                $lte: toDate
+                $gte: new Date(fromDate),
+                $lte: new Date(toDate)
             }
         }).sort({ date: 1 });
 
