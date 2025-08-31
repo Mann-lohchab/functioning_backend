@@ -11,14 +11,14 @@
             box-sizing: border-box;
         }
         
-        /* CSS Variables for themes */
+        /* CSS Variables for dark black and purple theme */
         :root {
             --bg-color: #000000;
-            --text-color: #ffffff;
+            --text-color: #e0e0e0;
             --card-bg: #0a0a0a;
             --border-color: #1a1a1a;
             --muted-text: #888888;
-            --accent-green: #00ff00;
+            --accent-purple: #9d4edd;
             --footer-text: #666666;
             --hover-bg: #111111;
         }
@@ -29,7 +29,7 @@
             --card-bg: #f8f8f8;
             --border-color: #e0e0e0;
             --muted-text: #555555;
-            --accent-green: #00cc00;
+            --accent-purple: #8b3dff;
             --footer-text: #777777;
             --hover-bg: #f0f0f0;
         }
@@ -71,7 +71,7 @@
         }
         
         .theme-toggle:hover {
-            border-color: var(--accent-green);
+            border-color: var(--accent-purple);
             background: var(--hover-bg);
         }
         
@@ -113,7 +113,7 @@
         .status-dot {
             width: 10px;
             height: 10px;
-            background: var(--accent-green);
+            background: var(--accent-purple);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
@@ -130,94 +130,17 @@
             margin-bottom: 4rem;
         }
         
-        .about-section {
+        .about-section,
+        .structure-section,
+        .endpoints-section,
+        .tech-section,
+        .auth-section {
             background: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 16px;
             padding: 2.5rem;
             text-align: left;
             margin-bottom: 3rem;
-        }
-        
-        .about-section h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        
-        .about-section p {
-            color: var(--muted-text);
-            font-size: 1rem;
-            line-height: 1.7;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-        
-        .structure-section {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            text-align: left;
-            margin-bottom: 3rem;
-        }
-        
-        .structure-section h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        
-        .file-tree {
-            background: var(--bg-color);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--text-color);
-            overflow-x: auto;
-            white-space: pre;
-        }
-        
-        .endpoints-section {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            text-align: left;
-            margin-bottom: 3rem;
-        }
-        
-        .tech-section {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            text-align: left;
-        }
-        
-        .section {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            transition: all 0.2s ease;
-            text-align: left;
-        }
-        
-        .section:hover {
-            border-color: var(--accent-green);
-            background: var(--hover-bg);
         }
         
         .section h2 {
@@ -233,14 +156,28 @@
         .section-icon {
             width: 12px;
             height: 12px;
-            background: var(--accent-green);
+            background: var(--accent-purple);
             border-radius: 50%;
         }
         
         /* Endpoints */
         .endpoint-list {
-            display: grid;
-            gap: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .endpoint-category {
+            margin-bottom: 1.5rem;
+        }
+        
+        .category-title {
+            font-size: 1.3rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
         }
         
         .endpoint {
@@ -256,6 +193,7 @@
         .endpoint:hover {
             transform: translateX(6px);
             background: var(--hover-bg);
+            border-color: var(--accent-purple);
         }
         
         .endpoint-header {
@@ -266,8 +204,8 @@
         }
         
         .method {
-            background: var(--accent-green);
-            color: #000000;
+            background: var(--accent-purple);
+            color: #ffffff;
             padding: 0.4rem 1rem;
             border-radius: 6px;
             font-size: 0.85rem;
@@ -290,6 +228,19 @@
             font-weight: 500;
         }
         
+        /* Authentication Section */
+        .auth-section {
+            border-left: 4px solid var(--accent-purple);
+        }
+        
+        .auth-section h2 {
+            color: var(--accent-purple);
+        }
+        
+        .auth-section h2::before {
+            background: var(--accent-purple);
+        }
+        
         /* Tech Stack */
         .tech-list {
             display: flex;
@@ -310,7 +261,7 @@
         }
         
         .tech:hover {
-            border-color: var(--accent-green);
+            border-color: var(--accent-purple);
             transform: translateY(-3px);
             background: var(--hover-bg);
         }
@@ -328,7 +279,7 @@
         }
         
         .port-highlight {
-            color: var(--accent-green);
+            color: var(--accent-purple);
             font-weight: 700;
         }
         
@@ -362,7 +313,7 @@
             content: '';
             width: 8px;
             height: 8px;
-            background: var(--accent-green);
+            background: var(--accent-purple);
             border-radius: 50%;
         }
         
@@ -383,7 +334,7 @@
         }
         
         .footer-section ul li a:hover {
-            color: var(--accent-green);
+            color: var(--accent-purple);
         }
         
         .footer-bottom {
@@ -397,7 +348,7 @@
         }
         
         .footer-bottom .port {
-            color: var(--accent-green);
+            color: var(--accent-purple);
             font-weight: 700;
         }
         
@@ -470,13 +421,33 @@
             <p>Our RESTful architecture ensures scalable, reliable, and efficient data exchange while maintaining the highest standards of security and performance. The API serves as the backbone for educational institutions seeking to digitize and optimize their student management processes.</p>
         </section>
         
+        <!-- Authentication Section -->
+        <section class="auth-section">
+            <h2>
+                <div class="section-icon"></div>
+                Authentication & Security
+            </h2>
+            <p>This API uses <strong>JWT (JSON Web Tokens)</strong> for secure authentication. All endpoints under <code>/api/students/*</code> (except login) require a valid JWT token in the request header:</p>
+            <p><code>Authorization: Bearer <your_token></code></p>
+            <p>🔑 To gain access, users must first authenticate via:</p>
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="path">/api/students/login</span>
+                </div>
+                <div class="description">Authenticate with email and password to receive a JWT token for subsequent requests.</div>
+            </div>
+            <p>Once logged in, the token grants access to protected routes. Unauthorized requests will return <code>401 Unauthorized</code>.</p>
+        </section>
+
         <!-- Project Structure -->
         <section class="structure-section">
             <h2>
                 <div class="section-icon"></div>
                 Project Structure
             </h2>
-            <div class="file-tree">├── app.js
+            <div class="file-tree">
+├── app.js
 ├── backend-structure.txt
 ├── config
 │   └── database.js
@@ -517,85 +488,100 @@
 9 directories, 29 files</div>
         </section>
         
-        <div class="content-grid">
-            <!-- API Endpoints Section -->
-            <section class="endpoints-section">
-                <h2>
-                    <div class="section-icon"></div>
-                    API Endpoints
-                </h2>
-                <div class="endpoint-list">
+        <!-- API Endpoints Section -->
+        <section class="endpoints-section">
+            <h2>
+                <div class="section-icon"></div>
+                API Endpoints
+            </h2>
+            <div class="endpoint-list">
+                
+                <!-- Public Endpoints -->
+                <div class="endpoint-category">
+                    <div class="category-title">🔓 Public (No Auth)</div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">POST</span>
+                            <span class="path">/api/students/login</span>
+                        </div>
+                        <div class="description">Authenticate user and receive JWT token for accessing protected routes</div>
+                    </div>
+                </div>
+
+                <!-- Private Endpoints -->
+                <div class="endpoint-category">
+                    <div class="category-title">🔐 Protected (JWT Required)</div>
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method">GET</span>
-                            <span class="path">/api/students</span>
+                            <span class="path">/api/students/profile</span>
                         </div>
-                        <div class="description">Student authentication and comprehensive profile management system</div>
+                        <div class="description">Retrieve authenticated student's complete profile and personal details</div>
                     </div>
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method">GET</span>
                             <span class="path">/api/students/attendance</span>
                         </div>
-                        <div class="description">Detailed attendance records with statistical analysis and reporting</div>
+                        <div class="description">Access detailed attendance records with statistics and reporting</div>
                     </div>
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method">GET</span>
                             <span class="path">/api/students/calendar</span>
                         </div>
-                        <div class="description">Academic calendar events, schedules, and important institutional dates</div>
+                        <div class="description">Fetch academic calendar events, holidays, and institutional dates</div>
                     </div>
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method">GET</span>
                             <span class="path">/api/students/homework</span>
                         </div>
-                        <div class="description">Assignment management, submission tracking, and deadline monitoring</div>
+                        <div class="description">Manage assignments, track submissions, and monitor deadlines</div>
                     </div>
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method">GET</span>
                             <span class="path">/api/students/marks</span>
                         </div>
-                        <div class="description">Academic performance data, grades, and comprehensive result analytics</div>
+                        <div class="description">View academic performance, grades, and result analytics</div>
                     </div>
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method">GET</span>
                             <span class="path">/api/students/notices</span>
                         </div>
-                        <div class="description">Official institutional announcements and critical notifications</div>
+                        <div class="description">Receive official announcements and critical institutional notifications</div>
                     </div>
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method">GET</span>
                             <span class="path">/api/students/timetable</span>
                         </div>
-                        <div class="description">Class schedules, room assignments, and academic timetabling</div>
+                        <div class="description">Access class schedules, room assignments, and daily academic planning</div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Technology Stack -->
-            <section class="tech-section">
-                <h2>
-                    <div class="section-icon"></div>
-                    Technology Stack
-                </h2>
-                <div class="tech-list">
-                    <div class="tech">Node.js</div>
-                    <div class="tech">Express.js</div>
-                    <div class="tech">MongoDB</div>
-                    <div class="tech">JWT</div>
-                    <div class="tech">REST API</div>
-                </div>
-                <div class="version-info">
-                    <p>API Version <span class="port-highlight">1.0</span> • Production Environment</p>
-                    <p>Port <span class="port-highlight" id="port">10000</span> • High Availability</p>
-                </div>
-            </section>
-        </div>
+        <!-- Technology Stack -->
+        <section class="tech-section">
+            <h2>
+                <div class="section-icon"></div>
+                Technology Stack
+            </h2>
+            <div class="tech-list">
+                <div class="tech">Node.js</div>
+                <div class="tech">Express.js</div>
+                <div class="tech">MongoDB</div>
+                <div class="tech">JWT</div>
+                <div class="tech">REST API</div>
+            </div>
+            <div class="version-info">
+                <p>API Version <span class="port-highlight">1.0</span> • Production Environment</p>
+                <p>Port <span class="port-highlight" id="port">10000</span> • High Availability</p>
+            </div>
+        </section>
         
         <!-- Professional Footer -->
         <footer class="main-footer">

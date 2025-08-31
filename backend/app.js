@@ -48,7 +48,7 @@ mongoose.connection.on('error', (err) => {
   console.log('❌ MongoDB connection error:', err.message);
 });
 
-//ROUTES
+// STUDENT ROUTES
 console.log('🔄 Loading API routes...');
 const StudentAuth = require('./Routes/StudentAuth');
 const Attendance = require('./Routes/Attendance');
@@ -66,6 +66,18 @@ app.use('/api/students/Marks',Marks);
 app.use('/api/students/Notice',Notice);
 app.use('/api/students/Timetable',Timetable);
 console.log('✅ All API routes loaded');
+
+//ADMIN ROUTES
+/*const AdminAuth = require('./Routes/Admin/AdminAuth');
+const AdminStudents = require('./Routes/Admin/Student');
+const AdminTeachers = require('./Routes/Admin/Teacher');
+const AdminCalendar = require('./Routes/Admin/Calendar');
+
+app.use('/api/admin', AdminAuth);
+app.use('/api/admin/students', AdminStudents);
+app.use('/api/admin/teachers', AdminTeachers);
+app.use('/api/admin/calendar', AdminCalendar);*/
+
 
 // Default Route - Serve HTML file with logging
 app.get('/', (req, res) => {

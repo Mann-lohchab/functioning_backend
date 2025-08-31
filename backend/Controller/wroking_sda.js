@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
 
     try {
         // Check if all required fields are provided
-        if (!studentID ||  !password) {
+        if (!studentID || !firstName || !fathersName || !mothersName || !Address || !grade || !email || !password) {
             return res.status(400).json({
                 message: "All required fields must be provided",
                 required: ["studentID", "firstName", "fathersName", "mothersName", "Address", "grade", "email", "password"]
@@ -106,7 +106,7 @@ exports.addStudent = async (req, res) => {
 
     try {
         // Check if all required fields are provided
-        if (!studentID || !password) {
+        if (!studentID || !firstName || !fathersName || !mothersName || !Address || !grade || !email || !password) {
             return res.status(400).json({
                 message: "All required fields must be provided",
                 required: ["studentID", "firstName", "fathersName", "mothersName", "Address", "grade", "email", "password"]
