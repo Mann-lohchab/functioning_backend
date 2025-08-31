@@ -427,17 +427,30 @@
                 <div class="section-icon"></div>
                 Authentication & Security
             </h2>
-            <p>This API uses <strong>JWT (JSON Web Tokens)</strong> for secure authentication. All endpoints under <code>/api/students/*</code> (except login) require a valid JWT token in the request header:</p>
+            <p>This API uses <strong>JWT (JSON Web Tokens)</strong> for secure authentication. All protected endpoints require a valid JWT token in the request header:</p>
             <p><code>Authorization: Bearer <your_token></code></p>
-            <p>🔑 To gain access, users must first authenticate via:</p>
+
+            <h3 style="color: var(--accent-purple); margin: 2rem 0 1rem 0; font-size: 1.3rem;">👨‍🎓 Student Authentication</h3>
+            <p>🔑 Students authenticate via:</p>
             <div class="endpoint">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
                     <span class="path">/api/students/login</span>
                 </div>
-                <div class="description">Authenticate with email and password to receive a JWT token for subsequent requests.</div>
+                <div class="description">Authenticate with student ID and password to receive a JWT token for accessing student-specific routes.</div>
             </div>
-            <p>Once logged in, the token grants access to protected routes. Unauthorized requests will return <code>401 Unauthorized</code>.</p>
+
+            <h3 style="color: var(--accent-purple); margin: 2rem 0 1rem 0; font-size: 1.3rem;">👨‍💼 Admin Authentication</h3>
+            <p>🔑 Administrators authenticate via:</p>
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="path">/api/admin/login</span>
+                </div>
+                <div class="description">Authenticate with admin ID and password to receive a JWT token for accessing admin-specific routes and student management functions.</div>
+            </div>
+
+            <p>Once logged in, the token grants access to protected routes based on user role. Unauthorized requests will return <code>401 Unauthorized</code>.</p>
         </section>
 
         <!-- Project Structure -->
@@ -452,17 +465,21 @@
 ├── config
 │   └── database.js
 ├── Controller
+│   ├── Admin
+│   │   └── AdminAuthController.js
 │   ├── AttendanceController.js
 │   ├── CalendarController.js
 │   ├── HomeworkController.js
 │   ├── MarksController.js
 │   ├── NoticeController.js
-│   ├── studentAuthController.js
+│   ├── StudentAuthController.js
 │   └── TimetableController.js
 ├── Middleware
+│   ├── AdminAuth.js
 │   ├── auth.js
 │   └── validation.js
 ├── Models
+│   ├── Admin.js
 │   ├── Attendance.js
 │   ├── Calendar.js
 │   ├── Homework.js
@@ -473,6 +490,11 @@
 ├── package.json
 ├── Public
 ├── Routes
+│   ├── Admin
+│   │   ├── AdminAuth.js
+│   │   ├── Calendar.js
+│   │   ├── Student.js
+│   │   └── Teacher.js
 │   ├── Attendance.js
 │   ├── Calendar.js
 │   ├── Homework.js
@@ -480,12 +502,15 @@
 │   ├── Notice.js
 │   ├── StudentAuth.js
 │   └── Timetable.js
+├── test-admin-jwt-auth.js
+├── create-admin-user.js
 ├── Uploads
 └── utlis
     ├── dateHelpers.js
+    ├── jwtHelpers.js
     └── responseHelpers.js
 
-9 directories, 29 files</div>
+11 directories, 35 files</div>
         </section>
         
         <!-- API Endpoints Section -->
@@ -504,7 +529,14 @@
                             <span class="method">POST</span>
                             <span class="path">/api/students/login</span>
                         </div>
-                        <div class="description">Authenticate user and receive JWT token for accessing protected routes</div>
+                        <div class="description">Student authentication - receive JWT token for accessing student routes</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">POST</span>
+                            <span class="path">/api/admin/login</span>
+                        </div>
+                        <div class="description">Admin authentication - receive JWT token for accessing admin routes</div>
                     </div>
                 </div>
 
@@ -561,6 +593,32 @@
                         <div class="description">Access class schedules, room assignments, and daily academic planning</div>
                     </div>
                 </div>
+
+                <!-- Admin Endpoints -->
+                <div class="endpoint-category">
+                    <div class="category-title">👨‍💼 Admin Only (Admin JWT Required)</div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">POST</span>
+                            <span class="path">/api/students/admin/add-student</span>
+                        </div>
+                        <div class="description">Add new student to the system with hashed password</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">POST</span>
+                            <span class="path">/api/students/admin/update-password</span>
+                        </div>
+                        <div class="description">Update existing student's password with proper hashing</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">POST</span>
+                            <span class="path">/api/admin/logout</span>
+                        </div>
+                        <div class="description">Admin logout (client-side token removal)</div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -574,12 +632,14 @@
                 <div class="tech">Node.js</div>
                 <div class="tech">Express.js</div>
                 <div class="tech">MongoDB</div>
-                <div class="tech">JWT</div>
+                <div class="tech">JWT Auth</div>
                 <div class="tech">REST API</div>
+                <div class="tech">bcrypt</div>
             </div>
             <div class="version-info">
                 <p>API Version <span class="port-highlight">1.0</span> • Production Environment</p>
                 <p>Port <span class="port-highlight" id="port">10000</span> • High Availability</p>
+                <p>🔐 JWT Authentication for Students & Admins</p>
             </div>
         </section>
         

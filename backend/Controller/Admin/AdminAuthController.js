@@ -1,6 +1,7 @@
 
 const Admin = require('../../Models/Admin');
 const bcrypt = require('bcrypt');
+const { generateToken } = require('../../utlis/jwtHelpers');
 
 // 🔥 Login Admin
 exports.login = async (req, res) => {
@@ -26,20 +27,24 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        const sessionExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
-        await Admin.findByIdAndUpdate(admin._id, { sessionExpiry, lastLoginAt: new Date() });
-
-        res.cookie('admin_token', admin._id, {
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
+        // Update last login time (removed sessionExpiry as it's not needed with JWT)
+        await Admin.findByIdAndUpdate(admin._id, {
+            lastLoginAt: new Date()
         });
 
+        // Generate JWT token
+        const token = generateToken({
+            adminId: admin._id,
+            adminID: admin.adminID
+        });
+
+        // Send response with token
         res.status(200).json({
             message: `Welcome ${admin.firstName} ${admin.lastName || ''}`.trim(),
             adminID: admin.adminID,
-            email: admin.email
+            email: admin.email,
+            token: token,
+            expiresIn: '24h'
         });
     } catch (err) {
         console.error("Admin Login Error:", err);
@@ -48,13 +53,19 @@ exports.login = async (req, res) => {
 };
 
 // 🔥 Logout Admin
+// With JWT, logout is handled on the client side by removing the token
+// However, we can still provide an endpoint for consistency
 exports.logout = async (req, res) => {
     try {
-        if (req.adminID) {
-            await Admin.findByIdAndUpdate(req.adminID, { sessionExpiry: null });
-        }
-        res.clearCookie('admin_token');
-        res.status(200).json({ message: "Admin logged out successfully" });
+        // With JWT, we don't need to do anything server-side
+        // The client should remove the token from storage
+
+        // Optional: You could maintain a token blacklist here if needed
+        // For now, we'll just send a success response
+
+        res.status(200).json({
+            message: "Logged out successfully. Please remove the token from your client storage."
+        });
     } catch (err) {
         console.error("Admin Logout Error:", err);
         res.status(500).json({ message: "Server error during logout" });

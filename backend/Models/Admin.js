@@ -23,10 +23,6 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sessionExpiry: {
-        type: Date,
-        default: null
-    },
     lastLoginAt: {
         type: Date,
         default: Date.now
